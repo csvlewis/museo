@@ -1,5 +1,7 @@
 require './lib/photograph'
 require './lib/artist'
+require 'csv'
+
 class Curator
   attr_reader :artists,
               :photographs
@@ -56,5 +58,33 @@ class Curator
       end
     end
     photographs_from_country
+  end
+
+  def photographs_taken_between(range)
+    years = range.to_a
+    photos_taken = []
+    @photographs.each do |photo|
+      years.each do |year|
+        if photo.year == year.to_s
+          photos_taken << photo
+        end
+      end
+    end
+    photos_taken
+  end
+
+  def artists_photographs_by_age(artist)
+    photos = find_photographs_by_artist(artist)
+    photos_by_age = {}
+    photos.each do |photo|
+      photos_by_age[photo.year.to_i - artist.born.to_i] = photo.name
+    end
+    photos_by_age
+  end
+
+  def load_photographs(file_path)
+  end
+
+  def load_artists(file_path)
   end
 end
